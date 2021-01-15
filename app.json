@@ -1,0 +1,15 @@
+{
+  "name": "sn2",
+  "displayName": "sn2",
+  "expo": {
+    "name": "sn2",
+    "slug": "sn2",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "android": {
+      "package": "com.coldase.sn2"
+    }
+  }
+}
