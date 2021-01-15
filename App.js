@@ -9,7 +9,7 @@ import SongBtn from "./components/SongBtn";
 
 const max_songs = 15;
 
-// Make "snmusic" folder under Music
+// Make "snmusic" folder -> Internal Storage/Music/<here>
 
 export default function App() {  
   const [nimi, setNimi] = useState("");
@@ -19,7 +19,6 @@ export default function App() {
   const [permissionStatus, setStatus] = useState();
   const song_buttons = [];
   const sounds = [];
-  
 
   //Get permissions for MEDIA_LIBRARY
   const getPermissions = async () => {
@@ -34,7 +33,6 @@ export default function App() {
   
   // Get audio files from MediaLibrary                                                                         
   const get_sounds = async() => {
-    
     if (sounds.length === 0){
       const albumi = await MediaLibrary.getAlbumAsync("snmusic");
       const media = await MediaLibrary.getAssetsAsync({
@@ -99,6 +97,7 @@ export default function App() {
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#bae1ff",
