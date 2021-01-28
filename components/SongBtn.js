@@ -30,9 +30,9 @@ const SongBtn = (props) => {
 const styles = StyleSheet.create({
     bottomItem: {
         width: '32%',
-        height: '28%',
+        height: '20%',
         padding: 4,
-        margin: 2,
+        // margin: 2,
       },
       bottomInnerNo:{
         justifyContent: 'center',

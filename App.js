@@ -11,7 +11,7 @@ const max_songs = 15;
 let playing = false;
 
 export default function App() {  
-  const [nimi, setNimi] = useState("");
+  const [currentlyPlaying, setCurrentlyPlaying] = useState("");
   const [sound, setSound] = useState();
   const [count, setCount] = useState(0);
   const [permissionStatus, setStatus] = useState();
@@ -84,7 +84,7 @@ export default function App() {
       console.log('Loading Sound');
       const { sound } = await Audio.Sound.createAsync(sounds[song_index]);
       setSound(sound);
-      // setCurrentlyPlaying(sounds[song_index]["filename"])
+      setCurrentlyPlaying(sounds[song_index]["filename"]);
       console.log('Playing Sound');
       await sound.playAsync();
       sound.setIsLoopingAsync(true);
@@ -92,6 +92,7 @@ export default function App() {
     }
     else{
       sound.unloadAsync(this);
+      setCurrentlyPlaying("");
       playing = false;
     }
   }
@@ -119,12 +120,13 @@ export default function App() {
   return (
     <View style={styles.container}>
         <StatusBar/>
+        
         <View style={styles.top}>
           <Text style={styles.headertext}>Sävelnappi</Text>
         </View>
-        
         {/* <Text style={{textAlign: "center"}}>Playing:</Text> */}
-        {/* <Text style={styles.currentSong}>{currentlyPlaying}</Text> */}
+        <Text style={styles.currentSong}>{currentlyPlaying}</Text>
+        
         <View style={styles.bottom}>
           {song_buttons}
         </View>
@@ -137,21 +139,25 @@ const styles = StyleSheet.create({
     backgroundColor: "#bae1ff",
     flex: 1,
   },
+  textcontainer: {
+    backgroundColor: "#bae1ff",
+    justifyContent: "center",
+    
+  },
   currentSong:{
     textAlign: 'center',
-    marginBottom: 5,
-    fontSize: 15
+    padding: 10,
   },
   bottom: {
-    marginTop: 10,
-    height: "50%",
+    height: "72.5%",
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: "center",
     padding: 1,
   },
   top:{
-    marginTop: 20,
+    height: "10%",
+    marginTop: 25,
     justifyContent: "center",
   },
   headertext:{
