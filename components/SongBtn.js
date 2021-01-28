@@ -1,22 +1,36 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 
+
 const SongBtn = (props) => {
-    return (
-        <View style={styles.bottomItem}>
-            <TouchableOpacity style={styles.bottomInnerNo} onPress={props.play}>
-                <View style={styles.button}>
-                <Text style={styles.buttontext}>{props.button_id+1}</Text>
-                </View>
-            </TouchableOpacity>
-        </View>
-    )
+
+    const [currentStyle, setStyle] = useState(styles.bottomInnerNo);
+
+    const things = () => {
+      setStyle(styles.bottomInnerNo);
+      if(currentStyle === styles.bottomInnerYes){
+        setStyle(styles.bottomInnerNo);
+      }else{
+        setStyle(styles.bottomInnerYes);
+      }
+      props.play();
+    }
+    
+   return (
+      <View style={styles.bottomItem}>
+          <TouchableOpacity style={currentStyle} onPress={things}>
+              <View>
+              <Text style={styles.buttontext}>{props.button_id+1}</Text>
+              </View>
+          </TouchableOpacity>
+      </View>
+  )
 };
 
 const styles = StyleSheet.create({
     bottomItem: {
         width: '32%',
-        height: '30%',
+        height: '28%',
         padding: 4,
         margin: 2,
       },
@@ -27,8 +41,15 @@ const styles = StyleSheet.create({
         borderRadius: 2,
         elevation: 5
       },
+      bottomInnerYes:{
+        justifyContent: 'center',
+        backgroundColor: "green",
+        flex:1,
+        borderRadius: 2,
+        elevation: 5
+      },
       buttontext: {
-        fontSize: 50,
+        fontSize: 30,
         textAlign: 'center',
         shadowColor: "#000",
         color: "#fff",

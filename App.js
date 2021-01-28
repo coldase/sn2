@@ -8,12 +8,10 @@ import {Audio} from 'expo-av';
 import SongBtn from "./components/SongBtn";
 
 const max_songs = 15;
-
-// Make "snmusic" folder -> Internal Storage/Music/<here>
+let playing = false;
 
 export default function App() {  
   const [nimi, setNimi] = useState("");
-  const [currentlyPlaying, setCurrentlyPlaying] = useState("-");
   const [sound, setSound] = useState();
   const [count, setCount] = useState(0);
   const [permissionStatus, setStatus] = useState();
@@ -30,25 +28,49 @@ export default function App() {
       console.log('Permissions denied!');
     }
   }
-  
-  // Get audio files from MediaLibrary                                                                         
+
+  // Get audio files from MediaLibrary
+  // if songs in "snmusic" folder, takes songs from there
+  // else if "snmusic" not exist, takes songs from "Music" folder
+  // if "Music" folder is empty, no buttons in app
   const get_sounds = async() => {
     if (sounds.length === 0){
-      const albumi = await MediaLibrary.getAlbumAsync("snmusic");
-      const media = await MediaLibrary.getAssetsAsync({
-        mediaType: MediaLibrary.MediaType.audio,
-        album: albumi
-      });
-      for (let i=0; i<media.assets.length; i++){
-        if (i < max_songs){
-          sounds.push(media.assets[i]);
+      const sn_albumi = await MediaLibrary.getAlbumAsync("snmusic");
+      if(sn_albumi){
+        const media = await MediaLibrary.getAssetsAsync({
+          album: sn_albumi,
+          mediaType: MediaLibrary.MediaType.audio
+        });
+        for (let i=0; i<media.assets.length; i++){
+          if (i < max_songs){
+            sounds.push(media.assets[i]);
+          }
+        }
+        setCount(sounds.length);
+      }
+      else{
+        const music_albumi = await MediaLibrary.getAlbumAsync("Music");
+        if(music_albumi){
+          const media = await MediaLibrary.getAssetsAsync({
+            album: music_albumi,
+            mediaType: MediaLibrary.MediaType.audio
+          });
+          for (let i=0; i<media.assets.length; i++){
+            if (i < max_songs){
+              sounds.push(media.assets[i]);
+            }
+          }
+          setCount(sounds.length);
+        }
+        else{
+          null
         }
       }
-      setCount(sounds.length);
     }
-  } 
-  
-  //Push "sounds.length" times buttons to song_buttons array - MAKE ERROR CHECK 
+  }
+
+     
+  //Push "sounds.length" times buttons to song_buttons array 
   const add_buttons = () => {
     for (let i=0;i<count;i++){
       song_buttons.push(<SongBtn button_id={i} key={i} play={(test) => play_sound(i)}/>);
@@ -57,23 +79,35 @@ export default function App() {
   
   //Plays audio files, - MAKE ERROR CHECK
   const play_sound = async (song_index) => {
-    console.log('Loading Sound');
-    const { sound } = await Audio.Sound.createAsync(sounds[song_index]);
-    setSound(sound);
-    setCurrentlyPlaying(sounds[song_index]["filename"])
-    console.log('Playing Sound');
-    await sound.playAsync();
+    if(!playing){
+      // Audio.setIsEnabledAsync(true);
+      console.log('Loading Sound');
+      const { sound } = await Audio.Sound.createAsync(sounds[song_index]);
+      setSound(sound);
+      // setCurrentlyPlaying(sounds[song_index]["filename"])
+      console.log('Playing Sound');
+      await sound.playAsync();
+      sound.setIsLoopingAsync(true);
+      playing = true;
+    }
+    else{
+      sound.unloadAsync(this);
+      playing = false;
+    }
   }
-
+    
   React.useEffect(() => {
     return sound 
     ? () => {
       console.log('Unloading Sound');
       sound.unloadAsync();
+      // Audio.setIsEnabledAsync(false);
+      playing = false;
     }
     : undefined;
   }, [sound]);
   
+
   if (permissionStatus === 'granted'){
     get_sounds();
     add_buttons();
@@ -89,8 +123,8 @@ export default function App() {
           <Text style={styles.headertext}>Sävelnappi</Text>
         </View>
         
-        <Text style={{textAlign: "center"}}>Playing:</Text>
-        <Text style={styles.currentSong}>{currentlyPlaying}</Text>
+        {/* <Text style={{textAlign: "center"}}>Playing:</Text> */}
+        {/* <Text style={styles.currentSong}>{currentlyPlaying}</Text> */}
         <View style={styles.bottom}>
           {song_buttons}
         </View>
@@ -105,10 +139,11 @@ const styles = StyleSheet.create({
   },
   currentSong:{
     textAlign: 'center',
-    paddingBottom: 10,
-    fontSize: 20
+    marginBottom: 5,
+    fontSize: 15
   },
   bottom: {
+    marginTop: 10,
     height: "50%",
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -116,18 +151,26 @@ const styles = StyleSheet.create({
     padding: 1,
   },
   top:{
-    marginTop: 30,
+    marginTop: 20,
     justifyContent: "center",
   },
   headertext:{
-    paddingTop: "5%",
+    marginBottom: 10,
+    marginTop: 10,
     fontWeight: "bold",
-    fontSize: 50,
+    fontSize: 40,
     textAlign: 'center',
     shadowColor: "#000",
     color: "#fff",
     textShadowOffset: {width: 2, height: 2},
     textShadowRadius: 10,
     textShadowColor: "#000"
-  }
+  },
+  buttonstyle:{
+    justifyContent: 'center',
+    flex:1,
+    backgroundColor: "steelblue",
+    borderRadius: 2,
+    elevation: 5
+  },
 });
