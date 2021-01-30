@@ -8,6 +8,7 @@ import {Audio} from 'expo-av';
 import SongBtn from "./components/SongBtn";
 
 const max_songs = 15;
+
 let playing = false;
 
 export default function App() {  
@@ -17,6 +18,7 @@ export default function App() {
   const [permissionStatus, setStatus] = useState();
   const song_buttons = [];
   const sounds = [];
+  // const testimage = require("./assets/1.jpg");
 
   //Get permissions for MEDIA_LIBRARY
   const getPermissions = async () => {
@@ -40,7 +42,7 @@ export default function App() {
         const media = await MediaLibrary.getAssetsAsync({
           album: sn_albumi,
           mediaType: MediaLibrary.MediaType.audio
-        });
+        })
         for (let i=0; i<media.assets.length; i++){
           if (i < max_songs){
             sounds.push(media.assets[i]);
@@ -69,16 +71,16 @@ export default function App() {
     }
   }
 
-     
   //Push "sounds.length" times buttons to song_buttons array 
   const add_buttons = () => {
     for (let i=0;i<count;i++){
       song_buttons.push(<SongBtn button_id={i} key={i} play={(test) => play_sound(i)}/>);
     }
   }
-  
+    
   //Plays audio files, - MAKE ERROR CHECK
   const play_sound = async (song_index) => {
+    
     if(!playing){
       // Audio.setIsEnabledAsync(true);
       console.log('Loading Sound');
@@ -96,7 +98,6 @@ export default function App() {
       playing = false;
     }
   }
-    
   React.useEffect(() => {
     return sound 
     ? () => {
@@ -107,11 +108,11 @@ export default function App() {
     }
     : undefined;
   }, [sound]);
-  
 
   if (permissionStatus === 'granted'){
     get_sounds();
     add_buttons();
+
   }
   else if (permissionStatus !== 'granted'){
     getPermissions();

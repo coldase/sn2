@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
-
+import {View, Text, TouchableOpacity, StyleSheet, ImageBackground} from 'react-native';
 
 const SongBtn = (props) => {
 
@@ -19,15 +18,20 @@ const SongBtn = (props) => {
    return (
       <View style={styles.bottomItem}>
           <TouchableOpacity style={currentStyle} onPress={things}>
-              <View>
-              <Text style={styles.buttontext}>{props.button_id+1}</Text>
-              </View>
+            <ImageBackground source={{uri: `file:///storage/emulated/0/Pictures/snimages/${props.button_id + 1}.jpg`}} style={styles.image}>
+                  <Text style={styles.buttontext}>{props.button_id+1}</Text>
+            </ImageBackground>
           </TouchableOpacity>
       </View>
+
   )
 };
 
 const styles = StyleSheet.create({
+    image: {
+      width: "100%",
+      height: "100%"
+    },
     bottomItem: {
         width: '32%',
         height: '20%',
@@ -43,7 +47,8 @@ const styles = StyleSheet.create({
       },
       bottomInnerYes:{
         justifyContent: 'center',
-        backgroundColor: "green",
+        borderWidth: 4,
+        borderColor: "red",
         flex:1,
         borderRadius: 2,
         elevation: 5

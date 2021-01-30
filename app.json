@@ -1,15 +1,15 @@
 {
-  "name": "sn2",
-  "displayName": "sn2",
+  "name": "Savelnappi",
+  "displayName": "Savelnappi",
   "expo": {
-    "name": "sn2",
-    "slug": "sn2",
+    "name": "Savelnappi",
+    "slug": "Savelnappi",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
     ],
     "android": {
-      "package": "com.coldase.sn2"
+      "package": "com.coldase.Savelnappi"
     }
   }
 }
