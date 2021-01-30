@@ -3,13 +3,14 @@
   "displayName": "Savelnappi",
   "expo": {
     "name": "Savelnappi",
+    "icon":"./assets/icon.png",
     "slug": "Savelnappi",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
     ],
     "android": {
-      "package": "com.coldase.Savelnappi"
+      "package": "com.coldase.savelnappi"
     }
   }
 }
